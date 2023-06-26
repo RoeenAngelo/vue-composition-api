@@ -1,8 +1,43 @@
+<script setup>
+import { provide, reactive } from 'vue';
+import { useOnline } from '@vueuse/core'
+
+/*
+  User Data
+*/
+
+  const userData = reactive({
+    name: 'Roeen',
+    username: 'roeenangelo'
+  })
+
+  provide('userData', userData)
+
+/*
+  Online Status
+*/
+
+  const online = useOnline()
+
+</script>
+
 
 <template>
+  
+  <div class="user-data">
+    {{ userData.name }} @{{ userData.username }} |
+    Network Status:
+    <span
+      :style="{color: online ? 'green' : 'red'}"
+    >
+      {{ online ? 'online' : 'offline' }}
+    </span>
+  </div>
+
   <nav>
     <RouterLink to="/">Home</RouterLink>
     <RouterLink to="/posts">Posts</RouterLink>
+    <RouterLink to="/modals">Modals</RouterLink>
   </nav>
 
   <RouterView />
@@ -44,5 +79,13 @@ nav a:first-of-type {
   border: 0;
 }
 
+.user-data {
+  position: absolute;
+  background-color: beige;
+  top: 0;
+  right: 0;
+  font-size: 12px;
+  padding: 5px;
+}
 
 </style>

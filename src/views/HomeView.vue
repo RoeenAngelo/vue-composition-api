@@ -3,8 +3,8 @@
   imports
 */ 
 
-  import { computed, onMounted, reactive, watch } from 'vue';
-
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue';
+  import { useCounterStore } from '../stores/counter';
   // import global directive
   import { vAutofocus } from '@/directives/vAutofocus'
 
@@ -14,8 +14,11 @@
 
   const appTitle = 'My Amazing Counter App'
 
+  const appTitleRef = ref(null)
+
   onMounted(() => {
-    console.log('Do stuff related with the appTitle')
+    console.log(`The app title is ${ appTitleRef.value.offsetWidth } px wide!`)
+    // console.log('Do stuff related with the appTitle')
   })
 
 
@@ -23,35 +26,12 @@
   Counter
 */ 
 
-  function increaseCounter(amount) {
-    counterData.count += amount
-  }
+  // const { increaseCounter, counterData, oddOrEven, decreaseCounter } = useCounter() 
+  // we can use object destructuring (best practice) or use object dot notation below. Make sure to change the template
+  // const counter = useCounter()
 
-  function decreaseCounter(amount) {
-    counterData.count -= amount
-  }
-
-  // const counter = ref(0),
-  //   counterTitle = ref('My Counter')
-
-  const counterData = reactive({
-    count: 0,
-    title: 'My Counter'
-  })
-
-  // When watching a ref, syntax is watch(count)
-  // Use getter when watching a reactive data
-  watch(() => counterData.count, (newCount) => {
-    if (newCount >= 20) alert('You made it to 20!')
-  })
-
-  const oddOrEven = computed(() => {
-    return counterData.count % 2 === 0 ? 'even' : 'odd'
-  })
-
-  onMounted(() => {
-    console.log('Do stuff related with the counter')
-  })
+  const counter = useCounterStore()
+  
 
 /* 
   Local Directives
@@ -63,27 +43,27 @@
   //   }
   // }
 
-</script>
+</script>counter.
 
 
 
 <template>
   <div class="home">
-    <h2>{{ appTitle }}</h2>
-    <h3>{{ counterData.title }}:</h3>
+    <h2 ref="appTitleRef">{{ appTitle }}</h2>
+    <h3>{{ counter.title }}:</h3>
     <div>
-      <button @click="decreaseCounter(2)" class="btn">--</button>
-      <button @click="decreaseCounter(1)" class="btn">-</button>
-      <span class="counter">{{ counterData.count }}</span>
-      <button @click="increaseCounter(1)" class="btn">+</button>
-      <button @click="increaseCounter(2)" class="btn">++</button>
+      <button @click="counter.decreaseCounter(2)"  class="btn">--</button>
+      <button @click="counter.decreaseCounter(1)"  class="btn">-</button>
+      <span class="counter">{{ counter.count }}</span>
+      <button @click="counter.increaseCounter(1)" class="btn">+</button>
+      <button  @click="counter.increaseCounter(2)" class="btn">++</button>
     </div>
 
-    <p>This counter is {{ oddOrEven }}</p>
+    <p>This counter is {{ counter.oddOrEven }}</p>
     <div class="edit">
       <h4>Edit Counter Title:</h4>
       <input
-        v-model="counterData.title"
+        v-model="counter.title"
         v-autofocus
         type="text"
       >

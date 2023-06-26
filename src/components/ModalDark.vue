@@ -1,0 +1,55 @@
+<script setup>
+
+const emit = defineEmits(['update:modelValue'])
+const props = defineProps({
+	modelValue: {
+		type: Boolean,
+		default: false
+	},
+	title : {
+		type: String,
+		default: 'No Title Specified'
+	}
+})
+
+/*
+	Handle Button Click
+*/
+
+	function handleButtonClick() {
+		emit('update:modelValue', false)
+	}
+</script>
+
+
+<template>
+   <Teleport to="#modals-container">
+			<div
+				v-if="modelValue"
+				class="modal-dark"
+			>
+				<!-- title using slots -->
+				<!-- <h1><slot name="title"></slot></h1> -->
+
+				<!-- title using props -->
+				<h1>{{ title }}</h1>
+				<slot></slot>
+				<button @click="handleButtonClick">Hide modal</button>
+			</div>
+		</Teleport>
+</template>
+
+
+
+<style lang="scss" scoped>
+.modal-dark {
+    background-color: #333;
+	color: white;
+    padding: 10px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+}
+</style>
